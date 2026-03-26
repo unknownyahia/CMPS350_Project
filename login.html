@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login / Social Platform</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="auth-shell">
+    <div class="auth-card">
+        <div class="auth-brand">S</div>
+        <div class="auth-title">Sign in to Social Platform</div>
+
+        <div id="noticeBox" aria-live="polite"></div>
+
+        <form id="loginForm" novalidate>
+            <label for="email">Email</label>
+            <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    autocomplete="email"
+            />
+
+            <label for="password">Password</label>
+            <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Your password"
+                    required
+                    autocomplete="current-password"
+            />
+
+            <div class="auth-actions">
+                <button class="btn primary" id="loginBtn" type="submit">Login</button>
+                <a class="auth-alt" href="register.html">Create account</a>
+            </div>
+        </form>
+
+        <div class="seed-note">
+            <strong>Testing accounts:</strong>
+            <br />
+            <b>yahia@example.com</b> / <b>Passw0rd!</b>
+            <br />
+            <b>abdulaziz@example.com</b> / <b>Passw0rd!</b>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { ensureSeedData } from "./js/storage.js";
+    import { login } from "./js/auth.js";
+    import { showNotice } from "./js/ui.js";
+
+    ensureSeedData();
+
+    const loginForm = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const noticeBox = document.getElementById("noticeBox");
+
+    function submitForm() {
+        const emailValue = email.value.trim();
+        const passwordValue = password.value;
+
+        if (!emailValue || !passwordValue) {
+            return showNotice(noticeBox, "Please enter your email and password.", "err");
+        }
+
+        const res = login({ email: emailValue, password: passwordValue });
+
+        if (!res.ok) {
+            return showNotice(noticeBox, res.error, "err");
+        }
+
+        window.location.href = "index.html";
+    }
+
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitForm();
+    });
+</script>
+</body>
+</html>
